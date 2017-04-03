@@ -122,6 +122,6 @@ void dalvik_postcall(struct dexstuff_t *dex, struct dalvik_hook_t *h)
 
     dex->dvmUseJNIBridge_fnPtr(h->method, h->native_func);
 
-    if (h->debug_me)
-        __android_log_print(ANDROID_LOG_DEBUG, "ZX", "patched BACK %s to: 0x%x\n", h->method_name, h->native_func);
+    //if (h->debug_me)
+     //   __android_log_print(ANDROID_LOG_DEBUG, "ZX", "patched BACK %s to: 0x%x\n", h->method_name, h->native_func);
 }

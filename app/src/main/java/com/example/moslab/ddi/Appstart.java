@@ -10,11 +10,10 @@ public class Appstart extends Application{
     static {
         System.loadLibrary("ddi-lib");
     }
-    public static native void my_init();
+   // public static native void my_init();
     @Override
     public void onCreate() {
         super.onCreate();
-        my_init();
-
+        //my_init();
     }
 }

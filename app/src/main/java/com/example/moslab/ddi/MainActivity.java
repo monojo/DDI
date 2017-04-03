@@ -52,7 +52,8 @@ public class MainActivity extends AppCompatActivity {
         String ret = "";
 
         try {
-            InputStream inputStream = context.openFileInput("test1Mb.db");
+            InputStream inputStream = context.openFileInput("words" +
+                    "2.txt");
 
             if ( inputStream != null ) {
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
@@ -76,9 +77,14 @@ public class MainActivity extends AppCompatActivity {
 
         return ret;
     }
-
+    static int count = 0;
+    static {
+        System.loadLibrary("ddi-lib");
+    }
+    public  static native void  my_init();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -86,6 +92,14 @@ public class MainActivity extends AppCompatActivity {
         Log.i("test", "in onCreate");
         String abc = "adc";
         abc.contains("a");
+        A ab = new B();
+        A aa = new A();
+        ab.a();
+        aa.a();
+        //my_init();
+
+        ab.a();
+        aa.a();
         /*
         try {
             Log.i("ZX", HttpsURLConnection.class.getMethod("connect").toString());
@@ -111,26 +125,33 @@ public class MainActivity extends AppCompatActivity {
 
                 }*/
                 //new DownloadTask().execute("https://www.google.com");
-
-                //try{
+                A aaa = new A();
+                try{
                     long start = 0;
                     long end = 0;
                     start = elapsedRealtime();
                     String test;
 
                    // for(int i = 0; i < 50; i++) {
-                        //Download("https://www.google.com");
-                        test = readFromFile(getApplicationContext());
-                        writeToFile(test, getApplicationContext());
-                  //  }
+                        Download("https://www.google.com");
+                        if(count == 0)
+                            my_init();
+                    count++;
+                    aaa.a();
+                    //Download("https://www.google.com");
+
+                    //test = readFromFile(getApplicationContext());
+                        //writeToFile(test, getApplicationContext());
+                  //
+                    //  }
                     end = elapsedRealtime();
 
                     long interval = (end - start)/50;
                     Log.i("Time", Long.toString(interval));
                     //Download("https://www.google.com");
-               // }catch (IOException e){
+                }catch (IOException e){
 
-               // }
+                }
 
             }
         }) ;
@@ -201,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
             HttpsURLConnection connection = null;
             try {
                 connection = (HttpsURLConnection) url.openConnection();
-                Log.i("xin", connection.getURL().toString());
+                //Log.i("xin", connection.getURL().toString());
                 // Timeout for reading InputStream arbitrarily set to 3000ms.
                 //connection.setReadTimeout(3000);
                 // Timeout for connection.connect() arbitrarily set to 3000ms.
@@ -224,6 +245,9 @@ public class MainActivity extends AppCompatActivity {
                     Log.i("xin", "connection not ok");
                     throw new IOException("HTTP error code: " + responseCode);
                 }
+                else
+                    Log.i("ZX", "OK!");
+
 
                 return str;
             } finally {
