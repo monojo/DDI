@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -19,14 +20,24 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -37,16 +48,16 @@ public class MainActivity extends AppCompatActivity {
 
     private GoogleApiClient client;
 
-    private void writeToFile(String data,Context context) {
+    private void writeToFile(String data, Context context) {
         try {
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("t2", Context.MODE_PRIVATE));
             outputStreamWriter.write(data);
             outputStreamWriter.close();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             Log.e("Exception", "File write failed: " + e.toString());
         }
     }
+
     private String readFromFile(Context context) {
 
         String ret = "";
@@ -55,21 +66,20 @@ public class MainActivity extends AppCompatActivity {
             InputStream inputStream = context.openFileInput("words" +
                     "2.txt");
 
-            if ( inputStream != null ) {
+            if (inputStream != null) {
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
                 String receiveString = "";
                 StringBuilder stringBuilder = new StringBuilder();
 
-                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                while ((receiveString = bufferedReader.readLine()) != null) {
                     stringBuilder.append(receiveString);
                 }
 
                 inputStream.close();
                 ret = stringBuilder.toString();
             }
-        }
-        catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             Log.e("login activity", "File not found: " + e.toString());
         } catch (IOException e) {
             Log.e("login activity", "Can not read file: " + e.toString());
@@ -77,11 +87,15 @@ public class MainActivity extends AppCompatActivity {
 
         return ret;
     }
+
     static int count = 0;
+
     static {
         System.loadLibrary("ddi-lib");
     }
-    public  static native void  my_init();
+
+    public static native void my_init();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -126,35 +140,37 @@ public class MainActivity extends AppCompatActivity {
                 }*/
                 //new DownloadTask().execute("https://www.google.com");
                 A aaa = new A();
-                try{
+               // try {
                     long start = 0;
                     long end = 0;
                     start = elapsedRealtime();
                     String test;
 
-                   // for(int i = 0; i < 50; i++) {
-                        Download("https://www.google.com");
-                        if(count == 0)
-                            my_init();
+                    // for(int i = 0; i < 50; i++) {
+                    //Download("https://www.google.com");
+                    sendStuff();
+                    if (count == 0)
+                        my_init();
                     count++;
                     aaa.a();
                     //Download("https://www.google.com");
+                    ///Download("http://www.google.com");
 
                     //test = readFromFile(getApplicationContext());
-                        //writeToFile(test, getApplicationContext());
-                  //
+                    //writeToFile(test, getApplicationContext());
+                    //
                     //  }
                     end = elapsedRealtime();
 
-                    long interval = (end - start)/50;
+                    long interval = (end - start) / 50;
                     Log.i("Time", Long.toString(interval));
                     //Download("https://www.google.com");
-                }catch (IOException e){
+              //  } catch (IOException e) {
 
-                }
+               // }
 
             }
-        }) ;
+        });
 
         /*
         Context c = getApplicationContext();
@@ -244,8 +260,7 @@ public class MainActivity extends AppCompatActivity {
                 if (responseCode != HttpsURLConnection.HTTP_OK) {
                     Log.i("xin", "connection not ok");
                     throw new IOException("HTTP error code: " + responseCode);
-                }
-                else
+                } else
                     Log.i("ZX", "OK!");
 
 
@@ -321,6 +336,65 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             Log.i("xin", result);
+        }
+    }
+
+    public void sendStuff() {
+        String crlf = "\r\n";
+        String twoHyphens = "--";
+        String boundary = "*****";
+
+        String u = "http://10.42.0.133:8080";
+        try {
+            URL url = new URL(u);
+            Log.i("ZX", Environment.getRootDirectory().getAbsolutePath());
+            File file = new File(Environment.getRootDirectory().getAbsolutePath()+"/tmp", "1mbfile.txt");
+            try {
+                FileInputStream f = new FileInputStream(file);
+
+                HttpURLConnection conn;
+                try {
+                    conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("POST");
+                    //for sending file
+
+                    conn.setRequestProperty("Connection", "Keep-Alive");
+                    conn.setRequestProperty("Cache-Control", "no-cache");
+                    //conn.setRequestProperty("Content-Type", "multipart/form-data; boundary" + boundary);
+                    conn.setRequestProperty("Content-Type", "application/json");
+                    conn.setRequestProperty("Accept", "application/json");
+
+                    DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
+                    //OutputStream os = conn.getOutputStream();
+                    //String abc = "adfdfd";
+                    //PrintWriter wr = new PrintWriter(new OutputStreamWriter(os, abc));
+
+                    JSONObject obj = new JSONObject();
+                    try {
+                        obj.put("1", "I");
+                        obj.put("2", "II");
+                        dos.writeBytes(obj.toString());
+                        dos.flush();
+                        dos.close();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    conn.connect();
+                    int resCode = conn.getResponseCode();
+                    if (resCode == HttpURLConnection.HTTP_OK) {
+                        Log.i("ZX", "OK");
+                    }
+                    else {
+                        Log.i("ZX", "NOT OK");
+                    }
+                } catch (IOException e) {
+                    Log.i("ZX", "connection fail");
+                }
+            } catch (FileNotFoundException e) {
+                Log.i("ZX", "file not exist");
+            }
+        } catch (MalformedURLException e) {
+            Log.i("ZX", "Malformed URL");
         }
     }
 }

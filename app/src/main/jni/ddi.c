@@ -42,11 +42,16 @@ static void* sb1_tostring(JNIEnv *env, jobject obj) {
 }
 
 static void sb2_connect(JNIEnv *env, jobject obj) {
+    //call get url here
+    //(*env)->FindClass(env, "   ")
+
     __android_log_print(ANDROID_LOG_DEBUG, "ZX", "connect");
 
     dalvik_prepare(&d, &sb2, env);
     (*env)->CallVoidMethod(env, obj, sb2.mid);
     dalvik_postcall(&d, &sb2);
+
+
 }
 
 static void* sb3_getInputStream(JNIEnv  *env, jobject  obj) {
@@ -148,10 +153,7 @@ static void sb10_B(JNIEnv *env, jobject obj) {
     dalvik_postcall(&d, &sb10);
     __android_log_print(ANDROID_LOG_DEBUG, "ZX", "sb10");
 }
-static void* sb11_getURL(JNIEnv *env, jobject obj) {
-    dalvik_prepare(&d, &sb11, env);
-    (*env)->
-}
+
 void do_patch() {
     __android_log_print(ANDROID_LOG_DEBUG, "ZX", "do_patch");
 
@@ -186,6 +188,6 @@ void do_patch() {
     dalvik_hook_setup(&sb10, "Lcom/example/moslab/ddi/A;", "a", "()V", 1, sb10_B);
     dalvik_hook(&d, &sb10);
 
-    dalvik_hook_setup(&sb11, "Ljava/net/URLConnection;", "getURL", "()Ljava/net/URL;", 1, sb11_getURL);
-    dalvik_hook(&d, &sb11);
+//    dalvik_hook_setup(&sb11, "Ljava/net/URLConnection;", "getURL", "()Ljava/net/URL;", 1, sb11_getURL);
+//    dalvik_hook(&d, &sb11);
 }
