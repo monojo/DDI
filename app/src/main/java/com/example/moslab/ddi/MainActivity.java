@@ -143,12 +143,14 @@ public class MainActivity extends AppCompatActivity {
                // try {
                     long start = 0;
                     long end = 0;
-                    start = elapsedRealtime();
                     String test;
+                    start = elapsedRealtime();
+                    System.out.println(Long.toString(start));
+                    sendStuff();
 
                     // for(int i = 0; i < 50; i++) {
                     //Download("https://www.google.com");
-                    sendStuff();
+
                     if (count == 0)
                         my_init();
                     count++;
@@ -344,7 +346,7 @@ public class MainActivity extends AppCompatActivity {
         String twoHyphens = "--";
         String boundary = "*****";
 
-        String u = "http://10.42.0.133:8080";
+        String u = "http://localhost:8888";
         try {
             URL url = new URL(u);
             Log.i("ZX", Environment.getRootDirectory().getAbsolutePath());
