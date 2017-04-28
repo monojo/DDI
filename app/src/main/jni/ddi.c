@@ -124,8 +124,6 @@ static void* sb7_readline(JNIEnv *env, jobject obj) {
 }
 
 static void sb8_setRequestMethod(JNIEnv *env, jobject obj, jstring str) {
-
-
     jvalue args[1];
     args[0].l = str;
     dalvik_prepare(&d, &sb8, env);
@@ -134,6 +132,7 @@ static void sb8_setRequestMethod(JNIEnv *env, jobject obj, jstring str) {
     __android_log_print(ANDROID_LOG_DEBUG, "ZX", "sb8");
     //return (void*)res;
 }
+
 static void sb9_A(JNIEnv *env, jobject obj) {
     dalvik_prepare(&d, &sb9, env);
     (*env)->CallVoidMethod(env, obj, sb9.mid);
