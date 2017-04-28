@@ -139,33 +139,33 @@ public class MainActivity extends AppCompatActivity {
 
                 }*/
                 //new DownloadTask().execute("https://www.google.com");
-                A aaa = new A();
+                //A aaa = new A();
                // try {
                     long start = 0;
                     long end = 0;
                     String test;
                     start = elapsedRealtime();
                     System.out.println(Long.toString(start));
+                    //Log.i("Start Time", Long.toString(start));
                     sendStuff();
 
-                    // for(int i = 0; i < 50; i++) {
-                    //Download("https://www.google.com");
 
-                    if (count == 0)
-                        my_init();
+                    //for loading the ddi hooking
+                    //put here because at this point the target class has been loaded into DVM
+                    //if (count == 0)
+                        //my_init();
                     count++;
-                    aaa.a();
-                    //Download("https://www.google.com");
+                   //aaa.a();
                     ///Download("http://www.google.com");
 
                     //test = readFromFile(getApplicationContext());
                     //writeToFile(test, getApplicationContext());
                     //
                     //  }
-                    end = elapsedRealtime();
+                    //end = elapsedRealtime();
 
-                    long interval = (end - start) / 50;
-                    Log.i("Time", Long.toString(interval));
+                    //long interval = (end - start) / 50;
+                    //Log.i("Time", Long.toString(interval));
                     //Download("https://www.google.com");
               //  } catch (IOException e) {
 
@@ -346,7 +346,7 @@ public class MainActivity extends AppCompatActivity {
         String twoHyphens = "--";
         String boundary = "*****";
 
-        String u = "http://localhost:8888";
+        String u = "http://localhost:8889";
         try {
             URL url = new URL(u);
             Log.i("ZX", Environment.getRootDirectory().getAbsolutePath());
